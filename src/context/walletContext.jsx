@@ -8,12 +8,11 @@ const walletContext = React.createContext();
 
 const getContract = () => {
   if (!window.ethereum) return;
-
   const provider = new providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const contract = new ethers.Contract(
-    "0x0dF00373c8Be49608111D7B886eD109336575ffE",
-    ABI,
+    DATA.VOTE_CONTRACT_ADDRESS,
+    VOTE_CONTRACT_ABI,
     signer
   );
   return contract;
@@ -22,6 +21,12 @@ const getContract = () => {
 export default function WalletContextProvider({ children }) {
 
     const [address, setAddress] = useState(null);
+    const [pollQuestion, setPollQuestion] = useState(null);
+    const [pollOptions, setPollOptions] = useState([]);
+    const [anonStatus, setAnonStatus] = useState(false);
+    const [inputData, setInputData] = useState({});
+    const [hasVoted,setHasVoted] = useState();
+
 
     const connectWallet = async () => {
       new providers.Web3Provider(window.ethereum);
@@ -35,11 +40,63 @@ export default function WalletContextProvider({ children }) {
       setAddress(null);
     };
 
+    const getPollQuestion = async () => {
+
+      const contract = getContract();
+      const question = await contract.votingQuestion();
+      setPollQuestion(question);
+    }
+
+    const getPollOptions = async () => {
+
+      const contract = getContract();
+      const res = await contract.getAllProposals();
+
+      let arr = [];
+      for(let i=0;i<res.length;i++){
+         arr.push(res[i][0].toString());
+      }
+      setPollOptions(arr);
+    }
+
+ const GiveYourVote = async(index)=>{
+
+
+  if(hasVoted){
+     alert("You have already Voted. Scroll 👇 to see the current results")
+     return;
+    }
+
+   const contract = getContract();
+   try{ 
+   await contract.voteForProposal(
+      index,
+      inputData.a,
+      inputData.b,
+      inputData.c,
+      inputData.Input
+      );  
+      setHasVoted(true);
+    }catch(e){
+      console.error("Voting Error: ",e);
+  }
+  }
+
+const hasUserVoted = async()=>{
+  const contract = getContract();
+  const flag = await contract.checkVoted(address);
+  console.log("flag : ",flag)
+  setHasVoted(flag);
+
+}
 
 
   useEffect(() => {
-    if (window.ethereum) {
-  
+    // connectWallet();
+    if(address){
+      getPollQuestion();
+      getPollOptions();
+      hasUserVoted();
     }
   }, [address]);
 
@@ -49,6 +106,13 @@ export default function WalletContextProvider({ children }) {
         connectWallet,
         address,
         disconnectWallet,
+        pollQuestion,
+        pollOptions,
+        setAnonStatus,
+        anonStatus,
+        GiveYourVote,
+        setInputData,
+        hasVoted,
       }}
     >
       {children}
