@@ -12,3 +12,4 @@ Currently, two official plugins are available:
 
 
 - [Apolls Contracts](https://github.com/Shivamycodee/APolls-contract)
+- [Apolls TheGraph](https://github.com/Shivamycodee/apolls-thegraph)
