@@ -32,19 +32,23 @@ function App() {
 
 
   return (
-    <div style={{height:"100vh"}}>
+    <div style={{ height: "100vh" }}>
       <nav style={{ position: "fixed", top: "20px", right: "10px" }}>
         <NavComponent />
       </nav>
 
       <div>
-        {anonAadhaar?.status == "logged-in" ?   <CenterComponent /> : <LogInWithAnonAadhaar />}
+        {anonAadhaar?.status == "logged-in" ? (
+          <CenterComponent />
+        ) : (
+          <div style={{ position: "fixed", top: "25px" }}>
+            <LogInWithAnonAadhaar />
+          </div>
+        )}
       </div>
       {/* {anonAadhaar?.status == "logged-in" ? <p style={{bottom:"0",position:"fixed",left:"46%"}}>✅ Proof is valid</p>:null} */}
-    
 
-     <ChartComp/>
-
+      <ChartComp />
     </div>
   );
 
