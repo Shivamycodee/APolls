@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getData } from "../api/thegraph.js";
-import { useGlobalContext } from "../context/walletContext";
+import { useGlobalContext } from "../context/walletContext.jsx";
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import PieChart from "./PieChart.jsx";

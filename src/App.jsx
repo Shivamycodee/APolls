@@ -8,7 +8,7 @@ import GETInputData from "./components/getInputParams";
 import NavComponent from './components/NavComponent.jsx';
 import CenterComponent from './components/CenterComponent.jsx';
 import { useGlobalContext } from './context/walletContext.jsx';
-import ChartComp from './components/chartComp.jsx';
+import ChartComp from './components/ChartComp.jsx';
 
 function App() {
 
